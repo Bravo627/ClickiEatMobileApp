@@ -4,6 +4,14 @@ import 'package:flutter/material.dart';
 
 import './homepage.dart';
 
+/// The main [FirebaseAuth] instance object
+final FirebaseAuth _auth = FirebaseAuth.instance;
+
+/// It is a global key for [EmptyScaffold] and [LoginPageScaffold]
+/// Used in Firebase hooks to show respective dialogs
+/// Might not be the best practise but gets the job done
+final GlobalKey<NavigatorState> mainAppKey = new GlobalKey<NavigatorState>();
+
 /// The main function.
 /// Initializes all necessary bindings and run the app.
 void main() {
@@ -15,7 +23,7 @@ void main() {
 
 /// The main stateless app class.
 /// Returns a MaterialApp with dark theme
-/// and scaffold [LoginPageScaffold].
+/// and scaffold [EmptyScaffold].
 class MainApp extends StatelessWidget {
   const MainApp({Key? key}) : super(key: key);
 
@@ -23,24 +31,42 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData.dark(),
-      home: LoginPageScaffold(),
+      home: EmptyScaffold(),
     );
   }
 }
 
-/// It is a global key for [LoginPageScaffold]
-/// Used in Firebase hooks to show respective dialogs
-/// Might not be the best practise but gets the job done
-final GlobalKey<NavigatorState> loginPageScaffoldKey =
-    new GlobalKey<NavigatorState>();
+/// This is an empty scaffold which is drawn by default
+/// After the listener on [FirebaseAuth] gives us actual route to go
+/// We will pop of this and push the actual page to the app
+class EmptyScaffold extends StatefulWidget {
+  EmptyScaffold({Key? key}) : super(key: mainAppKey);
+
+  @override
+  _EmptyScaffoldState createState() => _EmptyScaffoldState();
+}
+
+class _EmptyScaffoldState extends State<EmptyScaffold> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold();
+  }
+
+  @override
+
+  /// Calls [super.initState()] and inserts listener to
+  /// [widget._auth.userChanges()]
+  /// which itself is [FirebaseAuth] object
+  void initState() {
+    super.initState();
+    _auth.userChanges().listen(userChanges);
+  }
+}
 
 /// The scaffold class on the sign-in/sign-up page
 /// Also contains the [FirebaseAuth] object
 class LoginPageScaffold extends StatefulWidget {
-  LoginPageScaffold({Key? key}) : super(key: loginPageScaffoldKey);
-
-  /// The main [FirebaseAuth] instance object
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  LoginPageScaffold({Key? key}) : super(key: mainAppKey);
 
   @override
   _LoginPageScaffoldState createState() => _LoginPageScaffoldState();
@@ -48,7 +74,6 @@ class LoginPageScaffold extends StatefulWidget {
 
 /// The state of [LoginPageScaffold]
 class _LoginPageScaffoldState extends State<LoginPageScaffold> {
-
   /// Controller for username
   final TextEditingController _userNameController = TextEditingController();
 
@@ -56,16 +81,7 @@ class _LoginPageScaffoldState extends State<LoginPageScaffold> {
   final TextEditingController _passwordController = TextEditingController();
 
   @override
-  /// Calls [super.initState()] and inserts listener to
-  /// [widget._auth.userChanges()]
-  /// which itself is [FirebaseAuth] object
-  void initState() {
-    super.initState();
 
-    widget._auth.userChanges().listen(userChanges);
-  }
-
-  @override
   /// Disposes both controllers and calls [super.dispose()]
   void dispose() {
     _userNameController.dispose();
@@ -75,6 +91,7 @@ class _LoginPageScaffoldState extends State<LoginPageScaffold> {
   }
 
   @override
+
   /// Contains the GUI for the login page
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -139,7 +156,7 @@ class _LoginPageScaffoldState extends State<LoginPageScaffold> {
                 child: ElevatedButton(
                   onPressed: () async {
                     await signInButton(_userNameController.text,
-                        _passwordController.text, widget._auth, context);
+                        _passwordController.text, context);
                   },
                   child: Text("Sign In"),
                 ),
@@ -153,7 +170,7 @@ class _LoginPageScaffoldState extends State<LoginPageScaffold> {
                 child: ElevatedButton(
                   onPressed: () async {
                     await signUpButton(_userNameController.text,
-                        _passwordController.text, widget._auth, context);
+                        _passwordController.text, context);
                   },
                   child: Text("Sign Up"),
                 ),
@@ -184,36 +201,50 @@ Future<void> userChanges(User? user) async {
       await user.sendEmailVerification();
       await FirebaseAuth.instance.signOut();
       await showMessageDialog("Sign up complete",
-          "Please verify your email address!", loginPageScaffoldKey.currentContext!);
+          "Please verify your email address!", mainAppKey.currentContext!);
     } else {
-
       /*
         When the user signs-in we navigate to homepage of the app
         We pop this page because, if we go back on the homepage
         we should not come back to this login page
+
+        This will pop all pages above the [mainAppKey] scaffold
+        and insert our desired page
        */
-      Navigator.pop(loginPageScaffoldKey.currentContext!);
-      Navigator.push(loginPageScaffoldKey.currentContext!,
-          MaterialPageRoute(builder: (context) => HomePage()));
+      Navigator.pushAndRemoveUntil(
+          mainAppKey.currentContext!,
+          MaterialPageRoute(builder: (context) => HomePage()),
+          (route) => false);
     }
+  } else {
+    /*
+      Since [mainAppKey] is used by both [EmptyScaffold] and
+      [LoginPageScaffold], we can without worrying pop and push
+      to both pages
+     */
+    Navigator.pushAndRemoveUntil(
+        mainAppKey.currentContext!,
+        MaterialPageRoute(builder: (context) => LoginPageScaffold()),
+        (route) => false);
   }
 }
 
 /// The onClick for the signup button in the [LoginPageScaffold]
-Future<void> signUpButton(String email, String password, FirebaseAuth auth,
-    BuildContext context) async {
+Future<void> signUpButton(
+    String email, String password, BuildContext context) async {
   try {
-    await auth.createUserWithEmailAndPassword(email: email, password: password);
+    await _auth.createUserWithEmailAndPassword(
+        email: email, password: password);
   } on FirebaseAuthException catch (e) {
     await showMessageDialog("Error!", e.message ?? "Unknown error!", context);
   }
 }
 
 /// The onClick for the sign-in button in the [LoginPageScaffold]
-Future<void> signInButton(String email, String password, FirebaseAuth auth,
-    BuildContext context) async {
+Future<void> signInButton(
+    String email, String password, BuildContext context) async {
   try {
-    await auth.signInWithEmailAndPassword(email: email, password: password);
+    await _auth.signInWithEmailAndPassword(email: email, password: password);
   } on FirebaseAuthException catch (e) {
     await showMessageDialog("Error!", e.message ?? "Unknown error!", context);
   }
