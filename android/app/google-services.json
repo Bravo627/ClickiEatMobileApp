@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "962645154019",
+    "project_id": "messmanagementsystem-9d274",
+    "storage_bucket": "messmanagementsystem-9d274.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:962645154019:android:a4217dab8971732981cdd6",
+        "android_client_info": {
+          "package_name": "com.bravo627.clicki_eat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "962645154019-nr5122nfvel1jan65lji47q27o0t80j5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiLrACDhhpurFK17qtM0luj6zzXkehACM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "962645154019-nr5122nfvel1jan65lji47q27o0t80j5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

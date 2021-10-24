@@ -1,113 +1,244 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
+import './homepage.dart';
+
+/// The main function.
+/// Initializes all necessary bindings and run the app.
 void main() {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp().then((value) {
+    runApp(MainApp());
+  });
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+/// The main stateless app class.
+/// Returns a MaterialApp with dark theme
+/// and scaffold [LoginPageScaffold].
+class MainApp extends StatelessWidget {
+  const MainApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      theme: ThemeData.dark(),
+      home: LoginPageScaffold(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+/// It is a global key for [LoginPageScaffold]
+/// Used in Firebase hooks to show respective dialogs
+/// Might not be the best practise but gets the job done
+final GlobalKey<NavigatorState> loginPageScaffoldKey =
+    new GlobalKey<NavigatorState>();
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
+/// The scaffold class on the sign-in/sign-up page
+/// Also contains the [FirebaseAuth] object
+class LoginPageScaffold extends StatefulWidget {
+  LoginPageScaffold({Key? key}) : super(key: loginPageScaffoldKey);
 
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+  /// The main [FirebaseAuth] instance object
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _LoginPageScaffoldState createState() => _LoginPageScaffoldState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+/// The state of [LoginPageScaffold]
+class _LoginPageScaffoldState extends State<LoginPageScaffold> {
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  /// Controller for username
+  final TextEditingController _userNameController = TextEditingController();
+
+  /// Controller for password
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  /// Calls [super.initState()] and inserts listener to
+  /// [widget._auth.userChanges()]
+  /// which itself is [FirebaseAuth] object
+  void initState() {
+    super.initState();
+
+    widget._auth.userChanges().listen(userChanges);
   }
 
   @override
+  /// Disposes both controllers and calls [super.dispose()]
+  void dispose() {
+    _userNameController.dispose();
+    _passwordController.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  /// Contains the GUI for the login page
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+      body: SafeArea(
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Container(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Email Address: ",
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            Padding(
+              padding:
+                  const EdgeInsets.only(left: 16.0, bottom: 24, right: 16.0),
+              child: TextField(
+                decoration: InputDecoration(),
+                autofocus: true,
+                autocorrect: false,
+                enableSuggestions: false,
+                controller: _userNameController,
+              ),
+            ),
+            SizedBox(
+              height: 24,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Container(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Password: ",
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.only(left: 16.0, bottom: 24, right: 16.0),
+              child: TextField(
+                decoration: InputDecoration(),
+                obscureText: true,
+                enableSuggestions: false,
+                autocorrect: false,
+                controller: _passwordController,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                width: screenWidth * 0.4,
+                height: screenHeight * 0.06,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    await signInButton(_userNameController.text,
+                        _passwordController.text, widget._auth, context);
+                  },
+                  child: Text("Sign In"),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                width: screenWidth * 0.4,
+                height: screenHeight * 0.06,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    await signUpButton(_userNameController.text,
+                        _passwordController.text, widget._auth, context);
+                  },
+                  child: Text("Sign Up"),
+                ),
+              ),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+}
+
+/// The listener for the [userChanges()] in the [FirebaseAuth] object.
+/// user is null when signed-out
+/// else when signed-in it contains a valid user object.
+Future<void> userChanges(User? user) async {
+  /*
+    The listener is added after the [LoginPageScaffold] has been
+    created, so [loginPageScaffoldKey.currentContext] should not be null
+   */
+  if (user != null) {
+    /*
+      If the email is not verified, we send a verification
+      email and sign-out the user, because [FirebaseAuth]
+      automatically signs-in the user upon signing-up
+     */
+    if (!user.emailVerified) {
+      await user.sendEmailVerification();
+      await FirebaseAuth.instance.signOut();
+      await showMessageDialog("Sign up complete",
+          "Please verify your email address!", loginPageScaffoldKey.currentContext!);
+    } else {
+
+      /*
+        When the user signs-in we navigate to homepage of the app
+        We pop this page because, if we go back on the homepage
+        we should not come back to this login page
+       */
+      Navigator.pop(loginPageScaffoldKey.currentContext!);
+      Navigator.push(loginPageScaffoldKey.currentContext!,
+          MaterialPageRoute(builder: (context) => HomePage()));
+    }
+  }
+}
+
+/// The onClick for the signup button in the [LoginPageScaffold]
+Future<void> signUpButton(String email, String password, FirebaseAuth auth,
+    BuildContext context) async {
+  try {
+    await auth.createUserWithEmailAndPassword(email: email, password: password);
+  } on FirebaseAuthException catch (e) {
+    await showMessageDialog("Error!", e.message ?? "Unknown error!", context);
+  }
+}
+
+/// The onClick for the signin button in the [LoginPageScaffold]
+Future<void> signInButton(String email, String password, FirebaseAuth auth,
+    BuildContext context) async {
+  try {
+    await auth.signInWithEmailAndPassword(email: email, password: password);
+  } on FirebaseAuthException catch (e) {
+    await showMessageDialog("Error!", e.message ?? "Unknown error!", context);
+  }
+}
+
+/// Shows a message dialog with a [title], [message] in a given [context]
+/// Should be [await] if necessary for user to click the [Ok] button
+Future<void> showMessageDialog(
+    String title, String message, BuildContext context) async {
+  double screenWidth = MediaQuery.of(context).size.width;
+  double screenHeight = MediaQuery.of(context).size.height;
+
+  await showDialog(
+      context: context,
+      builder: (builder) {
+        return SimpleDialog(
+          title: Text(title),
+          children: [
+            Container(
+              width: screenWidth * 0.8,
+              height: screenHeight * 0.10,
+              child: Center(child: Text(message)),
+            ),
+          ],
+          contentPadding: EdgeInsets.all(16),
+        );
+      });
 }

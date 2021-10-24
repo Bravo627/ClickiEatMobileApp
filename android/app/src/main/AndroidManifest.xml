@@ -3,6 +3,7 @@
    <application
         android:label="clicki_eat"
         android:icon="@mipmap/ic_launcher">
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
