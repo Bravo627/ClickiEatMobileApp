@@ -209,7 +209,7 @@ Future<void> signUpButton(String email, String password, FirebaseAuth auth,
   }
 }
 
-/// The onClick for the signin button in the [LoginPageScaffold]
+/// The onClick for the sign-in button in the [LoginPageScaffold]
 Future<void> signInButton(String email, String password, FirebaseAuth auth,
     BuildContext context) async {
   try {
