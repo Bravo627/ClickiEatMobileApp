@@ -10,7 +10,7 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
 /// It is a global key for [EmptyScaffold] and [LoginPageScaffold]
 /// Used in Firebase hooks to show respective dialogs
 /// Might not be the best practise but gets the job done
-final GlobalKey<NavigatorState> mainAppKey = new GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> mainAppKey = GlobalKey<NavigatorState>();
 
 /// The main function.
 /// Initializes all necessary bindings and run the app.
