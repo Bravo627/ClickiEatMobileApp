@@ -1,3 +1,4 @@
+import 'package:clicki_eat/Hostels.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -20,11 +21,19 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
   TextEditingController signInPasswordController = TextEditingController();
   TextEditingController signUpEmailController = TextEditingController();
   TextEditingController signUpPasswordController = TextEditingController();
+  TextEditingController hostelNameController = TextEditingController();
+  List<String>? hostels;
 
   @override
   void initState() {
     super.initState();
     controller = TabController(length: 2, vsync: this);
+
+    getHostelsName().then((value) {
+      setState(() {
+        hostels = value;
+      });
+    });
   }
 
   @override
@@ -37,6 +46,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
       children: [
         Container(
           child: FlexBanner(),
+          width: screenWidth,
           height: screenHeight * 0.35,
         ),
         Container(
@@ -70,6 +80,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
               AuthTabSection(
                 emailController: signInEmailController,
                 passwordController: signInPasswordController,
+                hostelsController: hostelNameController,
                 isLoginMode: true,
                 onPress: () {
                   print(signInEmailController.text);
@@ -78,6 +89,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
               AuthTabSection(
                 emailController: signUpEmailController,
                 passwordController: signUpPasswordController,
+                hostelsController: hostelNameController,
                 isLoginMode: false,
                 onPress: () {
                   print(signUpEmailController.text);

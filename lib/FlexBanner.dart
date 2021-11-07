@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class FlexBanner extends StatelessWidget {
   const FlexBanner({Key? key}) : super(key: key);
@@ -11,15 +12,12 @@ class FlexBanner extends StatelessWidget {
           bottomLeft: Radius.circular(60),
           bottomRight: Radius.circular(60),
         ),
-        color: Colors.pinkAccent,
       ),
       child: Stack(
         children: [
-          // Placeholder(color: Colors.teal,),
+          SvgPicture.asset("assets/BackgroundIllustration.svg", fit: BoxFit.fill,),
           Center(
-            child: CircleAvatar(
-
-            ),
+            child: SvgPicture.asset("assets/HomepageLogo.svg"),
           ),
         ],
       ),
