@@ -57,6 +57,7 @@ class _HostelListButtonState extends State<HostelListButton> {
 }
 
 class AuthTabSection extends StatefulWidget {
+  final TextEditingController nameController;
   final TextEditingController emailController;
   final TextEditingController passwordController;
   final TextEditingController hostelsController;
@@ -65,6 +66,7 @@ class AuthTabSection extends StatefulWidget {
 
   const AuthTabSection({
     Key? key,
+    required this.nameController,
     required this.emailController,
     required this.passwordController,
     required this.hostelsController,
@@ -76,7 +78,8 @@ class AuthTabSection extends StatefulWidget {
   State<AuthTabSection> createState() => _AuthTabSectionState();
 }
 
-class _AuthTabSectionState extends State<AuthTabSection> with AutomaticKeepAliveClientMixin<AuthTabSection> {
+class _AuthTabSectionState extends State<AuthTabSection>
+    with AutomaticKeepAliveClientMixin<AuthTabSection> {
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -88,6 +91,21 @@ class _AuthTabSectionState extends State<AuthTabSection> with AutomaticKeepAlive
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
+          (!widget.isLoginMode)
+          ?
+          TextFormField(
+            controller: widget.nameController,
+            decoration: const InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(16),
+                  ),
+                ),
+                labelText: 'Name'),
+            textCapitalization: TextCapitalization.words,
+            autocorrect: false,
+          )
+          : Container(),
           TextFormField(
             controller: widget.emailController,
             decoration: const InputDecoration(
@@ -122,15 +140,24 @@ class _AuthTabSectionState extends State<AuthTabSection> with AutomaticKeepAlive
                         ),
                       );
                     } else {
-                      return Container(height: screenHeight * 0.1,);
+                      return Container(
+                        height: screenHeight * 0.1,
+                      );
                     }
                   },
                 )
-              : Container(height: screenHeight * 0.1,),
+              : Container(
+                  height: screenHeight * 0.1,
+                ),
           TextButton(
             style: TextButton.styleFrom(
               backgroundColor: Colors.pinkAccent,
               primary: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(16),
+                ),
+              ),
               minimumSize: Size(double.infinity, 48),
             ),
             onPressed: widget.onPress,

@@ -27,6 +27,7 @@ flutter:
   assets:
     - assets/BackgroundIllustration.svg
     - assets/HomepageLogo.svg
+    - assets/default_pic.jpg
 
   fonts:
     - family: Nexa
