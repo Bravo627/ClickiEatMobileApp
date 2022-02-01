@@ -3,21 +3,53 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import 'CustomMealCard.dart';
+import 'MessMenu.dart';
+
 class MessOffScaffold extends StatefulWidget {
-  const MessOffScaffold({Key? key}) : super(key: key);
+  static bool isFirst = true;
+  static Future<Map<String, List<String>>>? futureMessMenu;
+  MessOffScaffold({Key? key}) : super(key: key);
 
   @override
   _MessOffScaffoldState createState() => _MessOffScaffoldState();
 }
 
 class _MessOffScaffoldState extends State<MessOffScaffold> {
+  late List<DateTime> datesSelected;
+  late DateTime now;
+  late DateTime start;
+  late DateTime end;
+
+  @override
+  void initState() {
+    super.initState();
+
+    datesSelected = [];
+    now = DateTime.now();
+    start = now.add(Duration(days: 3));
+    end = DateTime(now.year, now.month + 1, 0);
+
+    datesSelected.add(start);
+
+    if (MessOffScaffold.isFirst) {
+      MessOffScaffold.futureMessMenu = getMessMenu();
+      MessOffScaffold.isFirst = false;
+    }
+  }
+
+
+  @override
+  void dispose() {
+    datesSelected.clear();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    DateTime now = DateTime.now();
-    DateTime start = now.add(Duration(days: 3));
-    DateTime end = DateTime(now.year, now.month + 1, 0);
 
     return BasePageScaffold(
         child: Container(
@@ -50,8 +82,41 @@ class _MessOffScaffoldState extends State<MessOffScaffold> {
                       formatButtonVisible: false,
                       titleCentered: true,
                     ),
+                    calendarFormat: CalendarFormat.month,
+                    onDaySelected: (selectedDay, focusedDay) {
+                      setState(() {
+                        datesSelected = [
+                          selectedDay
+                        ];
+                      });
+                    },
+                    selectedDayPredicate: (day) {
+                      return isSameDay(day, datesSelected[0]);
+                    },
                     // rowHeight: screenHeight * 0.05,
                   ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: screenHeight * 0.05),
+                child: FutureBuilder<Map<String, List<String>>>(
+                  future: MessOffScaffold.futureMessMenu,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          CustomMealCard(mealTime: "Breakfast", day: datesSelected[0], meals: snapshot.data!),
+                          CustomMealCard(mealTime: "Lunch", day: datesSelected[0], meals: snapshot.data!),
+                          CustomMealCard(mealTime: "Dinner", day: datesSelected[0], meals: snapshot.data!),
+                        ],
+                      );
+                    } else {
+                      return Container(
+                        height: screenHeight * 0.1,
+                      );
+                    }
+                  },
                 ),
               ),
             ],

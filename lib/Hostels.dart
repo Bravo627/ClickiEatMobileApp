@@ -1,4 +1,4 @@
- import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 Future<List<String>> getHostelsName() async {
   FirebaseFirestore instance = FirebaseFirestore.instance;
@@ -8,4 +8,4 @@ Future<List<String>> getHostelsName() async {
   return names.map((e) {
     return e.toString();
   }).toList();
- }
+}

@@ -1,5 +1,5 @@
 import 'package:clicki_eat/BasePage.dart';
-import 'package:clicki_eat/CustomCard.dart';
+import 'package:clicki_eat/CustomHomePageCard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -85,11 +85,11 @@ class HomePageSafeArea extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CustomCard(
+                  CustomHomePageCard(
                       icon: Image.asset('assets/default_pic.jpg'),
                       title: "Mess Menu",
                       func: () {}),
-                  CustomCard(
+                  CustomHomePageCard(
                       icon: Image.asset('assets/default_pic.jpg'),
                       title: "Mess Off",
                       func: () {
@@ -110,11 +110,11 @@ class HomePageSafeArea extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CustomCard(
+                  CustomHomePageCard(
                       icon: Image.asset('assets/default_pic.jpg'),
                       title: "Location",
                       func: () {}),
-                  CustomCard(
+                  CustomHomePageCard(
                       icon: Image.asset('assets/default_pic.jpg'),
                       title: "Chat",
                       func: () {}),

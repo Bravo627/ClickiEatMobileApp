@@ -1,20 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class CustomCard extends StatefulWidget {
+class CustomHomePageCard extends StatefulWidget {
   final Image icon;
   final String title;
   final VoidCallback func;
 
-  CustomCard(
+  CustomHomePageCard(
       {Key? key, required this.icon, required this.title, required this.func})
       : super(key: key);
 
   @override
-  _CustomCardState createState() => _CustomCardState();
+  _CustomHomePageCardState createState() => _CustomHomePageCardState();
 }
 
-class _CustomCardState extends State<CustomCard> {
+class _CustomHomePageCardState extends State<CustomHomePageCard> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
