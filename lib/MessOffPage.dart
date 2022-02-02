@@ -9,6 +9,7 @@ import 'MessMenu.dart';
 class MessOffScaffold extends StatefulWidget {
   static bool isFirst = true;
   static Future<Map<String, List<String>>>? futureMessMenu;
+
   MessOffScaffold({Key? key}) : super(key: key);
 
   @override
@@ -37,7 +38,6 @@ class _MessOffScaffoldState extends State<MessOffScaffold> {
       MessOffScaffold.isFirst = false;
     }
   }
-
 
   @override
   void dispose() {
@@ -85,10 +85,24 @@ class _MessOffScaffoldState extends State<MessOffScaffold> {
                     calendarFormat: CalendarFormat.month,
                     onDaySelected: (selectedDay, focusedDay) {
                       setState(() {
-                        datesSelected = [
-                          selectedDay
-                        ];
+                        datesSelected = [selectedDay];
                       });
+                    },
+                    onRangeSelected: (startDay, endDay, focusedDay) {
+                      if (startDay == null || endDay == null) {
+                        return;
+                      }
+
+                      DateTime day = startDay;
+
+                      datesSelected.clear();
+                      while (day.isBefore(endDay) || day.isAtSameMomentAs(endDay)) {
+                        datesSelected.add(day);
+                        day = day.add(Duration(days: 1));
+                      }
+
+                      print(datesSelected);
+                      setState(() {});
                     },
                     selectedDayPredicate: (day) {
                       return isSameDay(day, datesSelected[0]);
@@ -106,14 +120,15 @@ class _MessOffScaffoldState extends State<MessOffScaffold> {
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          CustomMealCard(mealTime: "Breakfast", day: datesSelected[0], meals: snapshot.data!),
-                          CustomMealCard(mealTime: "Lunch", day: datesSelected[0], meals: snapshot.data!),
-                          CustomMealCard(mealTime: "Dinner", day: datesSelected[0], meals: snapshot.data!),
+                          CustomMealCard(mealTime: "Breakfast", days: datesSelected, meals: snapshot.data!),
+                          CustomMealCard(mealTime: "Lunch", days: datesSelected, meals: snapshot.data!),
+                          CustomMealCard(mealTime: "Dinner", days: datesSelected, meals: snapshot.data!),
                         ],
                       );
                     } else {
-                      return Container(
-                        height: screenHeight * 0.1,
+                      return Padding(
+                        padding: EdgeInsets.only(top: screenHeight * 0.1),
+                        child: CircularProgressIndicator.adaptive(),
                       );
                     }
                   },

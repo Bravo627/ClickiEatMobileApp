@@ -21,8 +21,8 @@ class SignInSignUpPage extends StatefulWidget {
   _SignInSignUpPageState createState() => _SignInSignUpPageState();
 }
 
-class _SignInSignUpPageState extends State<SignInSignUpPage>
-    with SingleTickerProviderStateMixin {
+/*
+class _SignInSignUpPageState extends State<SignInSignUpPage> with SingleTickerProviderStateMixin {
   late TabController controller;
   late double screenWidth;
   late double screenHeight;
@@ -34,13 +34,14 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
   TextEditingController hostelNameController = TextEditingController();
   late StreamSubscription subscription;
 
+  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
     controller = TabController(length: 2, vsync: this);
     subscription = FirebaseAuth.instance.authStateChanges().listen(authListener);
   }
-
 
   @override
   void dispose() {
@@ -85,56 +86,61 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
           ),
         ),
         Container(
-          height: screenHeight * 0.5,
-          child: TabBarView(
-            controller: controller,
-            children: [
-              AuthTabSection(
-                nameController: signUpNameController,
-                emailController: signInEmailController,
-                passwordController: signInPasswordController,
-                hostelsController: hostelNameController,
-                isLoginMode: true,
-                onPress: () async {
-                  try {
-                    await FirebaseAuth.instance.signInWithEmailAndPassword(
-                        email: signInEmailController.text,
-                        password: signInPasswordController.text);
-                  } on FirebaseAuthException catch (e) {
-                    await showAlertDialog(context, "Error", e.toString());
-                  }
-                },
-              ),
-              AuthTabSection(
-                nameController: signUpNameController,
-                emailController: signUpEmailController,
-                passwordController: signUpPasswordController,
-                hostelsController: hostelNameController,
-                isLoginMode: false,
-                onPress: () async {
-                  try {
-                    await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                        email: signUpEmailController.text,
-                        password: signUpPasswordController.text);
-                    
-                    HashMap<String, String> map = HashMap<String, String>();
-                    map["hostel"] = hostelNameController.text;
-                    map["name"] = signUpNameController.text;
-                    await FirebaseFirestore.instance.collection("Users").doc(signUpEmailController.text).set(map);
-                    await FirebaseAuth.instance.signOut();
-                  } on FirebaseAuthException catch (e) {
-                    await showAlertDialog(context, "Error", e.toString());
-                  }
-                },
-              ),
-            ],
-          ),
+          height: (!isLoading) ? screenHeight * 0.5 : screenHeight * 0.2,
+          width: (!isLoading) ? double.infinity : screenHeight * 0.2,
+          child: (!isLoading)
+              ? TabBarView(
+                  controller: controller,
+                  children: [
+                    AuthTabSection(
+                      nameController: signUpNameController,
+                      emailController: signInEmailController,
+                      passwordController: signInPasswordController,
+                      hostelsController: hostelNameController,
+                      isLoginMode: true,
+                      onPress: () async {
+                        try {
+                          await FirebaseAuth.instance.signInWithEmailAndPassword(
+                              email: signInEmailController.text, password: signInPasswordController.text);
+                        } on FirebaseAuthException catch (e) {
+                          await showAlertDialog(context, "Error", e.toString());
+                        }
+                      },
+                    ),
+                    AuthTabSection(
+                      nameController: signUpNameController,
+                      emailController: signUpEmailController,
+                      passwordController: signUpPasswordController,
+                      hostelsController: hostelNameController,
+                      isLoginMode: false,
+                      onPress: () async {
+                        try {
+                          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                              email: signUpEmailController.text, password: signUpPasswordController.text);
+
+                          HashMap<String, String> map = HashMap<String, String>();
+                          map["hostel"] = hostelNameController.text;
+                          map["name"] = signUpNameController.text;
+                          await FirebaseFirestore.instance.collection("Users").doc(signUpEmailController.text).set(map);
+                          await FirebaseAuth.instance.signOut();
+                        } on FirebaseAuthException catch (e) {
+                          await showAlertDialog(context, "Error", e.toString());
+                        }
+                      },
+                    ),
+                  ],
+                )
+              : Center(child: CircularProgressIndicator()),
         )
       ],
     );
   }
 
   void authListener(User? user) {
+    setState(() {
+      isLoading = true;
+    });
+
     if (user != null) {
       if (!user.emailVerified) {
         user.sendEmailVerification();
@@ -146,9 +152,17 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
           MyUser.User.instance.setHostel(map["hostel"]);
           MyUser.User.instance.setName(map["name"]);
           if (map["image"] == null) {
-            MyUser.User.instance.setProfilePic(Image.asset("assets/default_pic.jpg", height: screenHeight * 0.1, width: screenHeight * 0.1,));
+            MyUser.User.instance.setProfilePic(Image.asset(
+              "assets/default_pic.jpg",
+              height: screenHeight * 0.1,
+              width: screenHeight * 0.1,
+            ));
           } else {
-            MyUser.User.instance.setProfilePic(Image.memory(Base64Decoder().convert(map["image"]), height: screenHeight * 0.1, width: screenHeight * 0.1,));
+            MyUser.User.instance.setProfilePic(Image.memory(
+              Base64Decoder().convert(map["image"]),
+              height: screenHeight * 0.1,
+              width: screenHeight * 0.1,
+            ));
           }
 
           print(MyUser.User.instance.getEmailAddress());
@@ -156,8 +170,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
           print(MyUser.User.instance.getHostel());
 
           Navigator.of(context).pop();
-          Navigator.of(context).push(MaterialPageRoute(builder: (context)
-          {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
             return HomePageScaffold();
           }));
         });
@@ -167,5 +180,10 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
       MyUser.User.instance.setEmailAddress("");
       MyUser.User.instance.setHostel("");
     }
+
+    setState(() {
+      isLoading = false;
+    });
   }
 }
+*/

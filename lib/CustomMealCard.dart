@@ -36,10 +36,10 @@ List<String> getMessMealFromList(DateTime currentDay, Map<String, List<String>> 
 
 class CustomMealCard extends StatefulWidget {
   final String mealTime;
-  final DateTime day;
+  final List<DateTime> days;
   final Map<String, List<String>> meals;
 
-  CustomMealCard({Key? key, required this.mealTime, required this.day, required this.meals}) : super(key: key);
+  CustomMealCard({Key? key, required this.mealTime, required this.days, required this.meals}) : super(key: key);
 
   @override
   _CustomMealCardState createState() => _CustomMealCardState();
@@ -50,7 +50,7 @@ class _CustomMealCardState extends State<CustomMealCard> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    List<String> todayMeals = getMessMealFromList(widget.day, widget.meals);
+    List<String> todayMeals = getMessMealFromList(widget.days[0], widget.meals);
 
     return Container(
       height: screenHeight * 0.2,
@@ -94,19 +94,27 @@ class _CustomMealCardState extends State<CustomMealCard> {
             child: Center(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 4),
-                child: Text(
-                  (widget.mealTime.toLowerCase() == "breakfast")
-                      ? todayMeals[0]
-                      : (widget.mealTime.toLowerCase() == "lunch")
-                          ? todayMeals[1]
-                          : (widget.mealTime.toLowerCase() == "dinner")
-                              ? todayMeals[2]
-                              : "",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 13,
-                  ),
-                ),
+                child: (widget.days.length == 1)
+                    ? Text(
+                        (widget.mealTime.toLowerCase() == "breakfast")
+                            ? todayMeals[0]
+                            : (widget.mealTime.toLowerCase() == "lunch")
+                                ? todayMeals[1]
+                                : (widget.mealTime.toLowerCase() == "dinner")
+                                    ? todayMeals[2]
+                                    : "",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 13,
+                        ),
+                      )
+                    : Text(
+                        "Multiple Days Selected",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 13,
+                        ),
+                      ),
               ),
             ),
           )
