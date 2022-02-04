@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bravo627.clicki_eat">
+
+    <uses-permission android:name="android.permission.VIBRATE" />
    <application
         android:label="clicki_eat"
         android:icon="@mipmap/ic_launcher">

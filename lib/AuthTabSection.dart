@@ -142,6 +142,7 @@ class _AuthTabSectionState extends State<AuthTabSection>
                     } else {
                       return Container(
                         height: screenHeight * 0.1,
+                        child: Center(child: CircularProgressIndicator.adaptive()),
                       );
                     }
                   },

@@ -53,14 +53,14 @@ class _CustomMealCardState extends State<CustomMealCard> {
     List<String> todayMeals = getMessMealFromList(widget.days[0], widget.meals);
 
     return Container(
-      height: screenHeight * 0.2,
+      height: screenHeight * 0.25,
       width: screenWidth * 0.3,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(32)),
         // border: Border.all(color: Colors.black, width: 1,)
-        boxShadow: [
-          BoxShadow(color: Color.fromARGB(100, 237, 147, 189), offset: Offset(1, 2), blurRadius: 8),
-        ],
+        // boxShadow: [
+        //   BoxShadow(color: Color.fromARGB(100, 237, 147, 189), offset: Offset(1, 2), blurRadius: 8),
+        // ],
       ),
       child: Column(
         children: [
@@ -90,6 +90,10 @@ class _CustomMealCardState extends State<CustomMealCard> {
                 bottomRight: Radius.circular(32),
               ),
               color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                    color: Color.fromARGB(100, 237, 147, 189), offset: Offset(1, 2), blurRadius: 16, spreadRadius: 2),
+              ],
             ),
             child: Center(
               child: Padding(
@@ -117,7 +121,19 @@ class _CustomMealCardState extends State<CustomMealCard> {
                       ),
               ),
             ),
-          )
+          ),
+          Container(
+            height: screenHeight * 0.05,
+            child: InkWell(
+              onTap: () {},
+              splashColor: Colors.pinkAccent,
+              child: Icon(
+                Icons.add_circle,
+                size: screenHeight * 0.04,
+                color: Colors.deepPurple,
+              ),
+            ),
+          ),
         ],
       ),
     );

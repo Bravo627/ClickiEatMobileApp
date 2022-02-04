@@ -1,14 +1,19 @@
 import 'package:clicki_eat/BasePage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'CustomMealCard.dart';
 import 'MessMenu.dart';
+import 'MessOffInformation.dart';
+import 'User.dart' as MyUser;
 
 class MessOffScaffold extends StatefulWidget {
   static bool isFirst = true;
   static Future<Map<String, List<String>>>? futureMessMenu;
+  static Map<String, Map<String, int>>? messOffInformation;
+  static Future<Map<String, Map<String, int>>>? futureMessOffInformation;
 
   MessOffScaffold({Key? key}) : super(key: key);
 
@@ -29,12 +34,14 @@ class _MessOffScaffoldState extends State<MessOffScaffold> {
     datesSelected = [];
     now = DateTime.now();
     start = now.add(Duration(days: 3));
-    end = DateTime(now.year, now.month + 1, 0);
+    end = DateTime(now.year, now.month + 2, 0);
 
     datesSelected.add(start);
 
     if (MessOffScaffold.isFirst) {
       MessOffScaffold.futureMessMenu = getMessMenu();
+      MessOffScaffold.futureMessOffInformation =
+          getMessOffInformation(MyUser.User.instance.getEmailAddress(), start, end);
       MessOffScaffold.isFirst = false;
     }
   }
@@ -57,7 +64,7 @@ class _MessOffScaffoldState extends State<MessOffScaffold> {
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.only(top: screenHeight * 0.05, bottom: screenHeight * 0.04),
+                padding: EdgeInsets.only(top: screenHeight * 0.04),
                 child: Text(
                   "Mess Off",
                   style: TextStyle(
@@ -77,7 +84,7 @@ class _MessOffScaffoldState extends State<MessOffScaffold> {
                   child: TableCalendar(
                     firstDay: start,
                     lastDay: end,
-                    focusedDay: start,
+                    focusedDay: datesSelected.last,
                     headerStyle: HeaderStyle(
                       formatButtonVisible: false,
                       titleCentered: true,
@@ -89,13 +96,19 @@ class _MessOffScaffoldState extends State<MessOffScaffold> {
                       });
                     },
                     onRangeSelected: (startDay, endDay, focusedDay) {
+                      HapticFeedback.vibrate();
                       if (startDay == null || endDay == null) {
                         return;
                       }
 
-                      DateTime day = startDay;
+                      if (startDay.isAfter(endDay)) {
+                        DateTime temp = startDay;
+                        startDay = endDay;
+                        endDay = temp;
+                      }
 
                       datesSelected.clear();
+                      DateTime day = startDay;
                       while (day.isBefore(endDay) || day.isAtSameMomentAs(endDay)) {
                         datesSelected.add(day);
                         day = day.add(Duration(days: 1));
@@ -105,24 +118,72 @@ class _MessOffScaffoldState extends State<MessOffScaffold> {
                       setState(() {});
                     },
                     selectedDayPredicate: (day) {
-                      return isSameDay(day, datesSelected[0]);
+                      for (DateTime loopDay in datesSelected) {
+                        if (isSameDay(day, loopDay)) return true;
+                      }
+
+                      return false;
                     },
+                    rangeSelectionMode: RangeSelectionMode.toggledOff,
                     // rowHeight: screenHeight * 0.05,
                   ),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: screenHeight * 0.05),
-                child: FutureBuilder<Map<String, List<String>>>(
-                  future: MessOffScaffold.futureMessMenu,
+                padding: EdgeInsets.only(top: screenHeight * 0.02),
+                child: FutureBuilder<List<dynamic>>(
+                  future: Future.wait([MessOffScaffold.futureMessMenu!, MessOffScaffold.futureMessOffInformation!]),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      if (MessOffScaffold.messOffInformation == null) {
+                        MessOffScaffold.messOffInformation = snapshot.data![1]! as Map<String, Map<String, int>>;
+                      }
+
+                      return Column(
                         children: [
-                          CustomMealCard(mealTime: "Breakfast", days: datesSelected, meals: snapshot.data!),
-                          CustomMealCard(mealTime: "Lunch", days: datesSelected, meals: snapshot.data!),
-                          CustomMealCard(mealTime: "Dinner", days: datesSelected, meals: snapshot.data!),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              CustomMealCard(
+                                mealTime: "Breakfast",
+                                days: datesSelected,
+                                meals: snapshot.data![0]! as Map<String, List<String>>,
+                              ),
+                              CustomMealCard(
+                                mealTime: "Lunch",
+                                days: datesSelected,
+                                meals: snapshot.data![0]! as Map<String, List<String>>,
+                              ),
+                              CustomMealCard(
+                                mealTime: "Dinner",
+                                days: datesSelected,
+                                meals: snapshot.data![0]! as Map<String, List<String>>,
+                              ),
+                            ],
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04, vertical: screenHeight * 0.02),
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor: Colors.pinkAccent,
+                                primary: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(16),
+                                  ),
+                                ),
+                                minimumSize: Size(double.infinity, 48),
+                              ),
+                              onPressed: () {},
+                              child: Text(
+                                "Submit...",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       );
                     } else {
