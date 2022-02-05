@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'MessOffInformation.dart';
+
 List<String> getMessMealFromList(DateTime currentDay, Map<String, List<String>> meals) {
   int dayOfWeek = currentDay.weekday;
 
@@ -34,12 +36,128 @@ List<String> getMessMealFromList(DateTime currentDay, Map<String, List<String>> 
   }).toList();
 }
 
+bool isMealOn(Map<String, Map<String, int>> messOffInformation, DateTime date, String meal) {
+  String monthsAsString = monthIntToString(date.month);
+  if (!messOffInformation.containsKey(monthsAsString)) {
+    return true;
+  }
+
+  Map<String, int> monthMessOffInformation = messOffInformation[monthsAsString]!;
+
+  String dateAsString = date.toUtc().toString();
+  if (!monthMessOffInformation.containsKey(dateAsString)) {
+    return true;
+  }
+
+  int dayMealInformation = monthMessOffInformation[dateAsString]!;
+  switch (meal) {
+    case "breakfast":
+      return dayMealInformation & 1 != 0;
+    case "lunch":
+      return dayMealInformation & 2 != 0;
+    case "dinner":
+      return dayMealInformation & 4 != 0;
+  }
+
+  return true;
+}
+
+bool isMealsOn(Map<String, Map<String, int>> messOffInformation, List<DateTime> dates, String meal) {
+  bool result = true;
+  for (DateTime date in dates) {
+    result &= isMealOn(messOffInformation, date, meal);
+  }
+
+  return result;
+}
+
+void updateMealInformation(Map<String, Map<String, int>> messOffInformation, DateTime date, String meal, bool on) {
+  String monthsAsString = monthIntToString(date.month);
+  String dateAsString = date.toUtc().toString();
+  if (!messOffInformation.containsKey(monthsAsString)) {
+    Map<String, int> dayInformation = Map();
+
+    int dayInformationInt = 7;
+    if (meal == "breakfast") {
+      if (!on) {
+        dayInformationInt &= ~1;
+      }
+    } else if (meal == "lunch") {
+      if (!on) {
+        dayInformationInt &= ~2;
+      }
+    } else if (meal == "dinner") {
+      if (!on) {
+        dayInformationInt &= ~4;
+      }
+    }
+
+    dayInformation[dateAsString] = dayInformationInt;
+    messOffInformation[monthsAsString] = dayInformation;
+    return;
+  }
+
+  Map<String, int> monthMessOffInformation = messOffInformation[monthsAsString]!;
+  if (!monthMessOffInformation.containsKey(dateAsString)) {
+    int dayInformationInt = 7;
+    if (meal == "breakfast") {
+      if (!on) {
+        dayInformationInt &= ~1;
+      }
+    } else if (meal == "lunch") {
+      if (!on) {
+        dayInformationInt &= ~2;
+      }
+    } else if (meal == "dinner") {
+      if (!on) {
+        dayInformationInt &= ~4;
+      }
+    }
+
+    monthMessOffInformation[dateAsString] = dayInformationInt;
+    return;
+  }
+
+  int dayInformationInt = monthMessOffInformation[dateAsString]!;
+  if (meal == "breakfast") {
+    if (!on) {
+      dayInformationInt &= ~1;
+    } else {
+      dayInformationInt |= 1;
+    }
+  } else if (meal == "lunch") {
+    if (!on) {
+      dayInformationInt &= ~2;
+    } else {
+      dayInformationInt |= 2;
+    }
+  } else if (meal == "dinner") {
+    if (!on) {
+      dayInformationInt &= ~4;
+    } else {
+      dayInformationInt |= 4;
+    }
+  }
+
+  monthMessOffInformation[dateAsString] = dayInformationInt;
+}
+
+void updateMealsInformation(
+    Map<String, Map<String, int>> messOffInformation, List<DateTime> dates, String meal, bool on) {
+  for (DateTime date in dates) {
+    updateMealInformation(messOffInformation, date, meal, on);
+  }
+}
+
 class CustomMealCard extends StatefulWidget {
   final String mealTime;
   final List<DateTime> days;
   final Map<String, List<String>> meals;
+  final Map<String, Map<String, int>> messOffInformation;
 
-  CustomMealCard({Key? key, required this.mealTime, required this.days, required this.meals}) : super(key: key);
+  CustomMealCard(
+      {Key? key, required this.mealTime, required this.days, required this.meals, required this.messOffInformation})
+      : super(key: key);
 
   @override
   _CustomMealCardState createState() => _CustomMealCardState();
@@ -122,18 +240,39 @@ class _CustomMealCardState extends State<CustomMealCard> {
               ),
             ),
           ),
-          Container(
-            height: screenHeight * 0.05,
-            child: InkWell(
-              onTap: () {},
-              splashColor: Colors.pinkAccent,
-              child: Icon(
-                Icons.add_circle,
-                size: screenHeight * 0.04,
-                color: Colors.deepPurple,
-              ),
-            ),
-          ),
+          ((isMealsOn(widget.messOffInformation, widget.days, widget.mealTime.toLowerCase()))
+              ? Container(
+                  height: screenHeight * 0.05,
+                  child: InkWell(
+                    onTap: () {
+                      updateMealsInformation(
+                          widget.messOffInformation, widget.days, widget.mealTime.toLowerCase(), false);
+                      setState(() {});
+                    },
+                    splashColor: Colors.pinkAccent,
+                    child: Icon(
+                      Icons.remove_circle,
+                      size: screenHeight * 0.04,
+                      color: Colors.deepPurple,
+                    ),
+                  ),
+                )
+              : Container(
+                  height: screenHeight * 0.05,
+                  child: InkWell(
+                    onTap: () {
+                      updateMealsInformation(
+                          widget.messOffInformation, widget.days, widget.mealTime.toLowerCase(), true);
+                      setState(() {});
+                    },
+                    splashColor: Colors.pinkAccent,
+                    child: Icon(
+                      Icons.add_circle,
+                      size: screenHeight * 0.04,
+                      color: Colors.deepPurple,
+                    ),
+                  ),
+                )),
         ],
       ),
     );

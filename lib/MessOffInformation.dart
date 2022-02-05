@@ -57,3 +57,20 @@ Future<Map<String, Map<String, int>>> getMessOffInformation(String userEmail, Da
 
   return result;
 }
+
+void setMessOffInformation(String userEmail, DateTime startDay, DateTime endDay, Map<String, Map<String, int>> messOffInformation) async {
+  FirebaseFirestore instance = FirebaseFirestore.instance;
+  QuerySnapshot<Map<String, dynamic>> yearSnapshot =
+    (await instance.collection("MessOff").doc(userEmail).collection(startDay.year.toString()).get());
+
+  List<String> monthsToSet = List.empty(growable: true);
+  monthsToSet.add(monthIntToString(startDay.month));
+  if (startDay.month != endDay.month)
+    monthsToSet.add(monthIntToString(endDay.month));
+
+  for (String month in monthsToSet) {
+    if (messOffInformation.containsKey(month)) {
+      await instance.collection("MessOff").doc(userEmail).collection(startDay.year.toString()).doc(month).set(messOffInformation[month]!);
+    }
+  }
+}

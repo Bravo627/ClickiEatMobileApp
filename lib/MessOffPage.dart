@@ -148,16 +148,19 @@ class _MessOffScaffoldState extends State<MessOffScaffold> {
                                 mealTime: "Breakfast",
                                 days: datesSelected,
                                 meals: snapshot.data![0]! as Map<String, List<String>>,
+                                messOffInformation: MessOffScaffold.messOffInformation!,
                               ),
                               CustomMealCard(
                                 mealTime: "Lunch",
                                 days: datesSelected,
                                 meals: snapshot.data![0]! as Map<String, List<String>>,
+                                messOffInformation: MessOffScaffold.messOffInformation!,
                               ),
                               CustomMealCard(
                                 mealTime: "Dinner",
                                 days: datesSelected,
                                 meals: snapshot.data![0]! as Map<String, List<String>>,
+                                messOffInformation: MessOffScaffold.messOffInformation!,
                               ),
                             ],
                           ),
@@ -174,7 +177,9 @@ class _MessOffScaffoldState extends State<MessOffScaffold> {
                                 ),
                                 minimumSize: Size(double.infinity, 48),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                setMessOffInformation(MyUser.User.user.getEmailAddress(), start, end, MessOffScaffold.messOffInformation!);
+                              },
                               child: Text(
                                 "Submit...",
                                 style: TextStyle(
