@@ -1,7 +1,11 @@
 import 'package:clicki_eat/BasePage.dart';
 import 'package:clicki_eat/CustomHomePageCard.dart';
+import 'package:clicki_eat/MessMenuPage.dart';
+import 'package:clicki_eat/SignInSignUpPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'BottomHomeIcon.dart';
 import 'MessOffPage.dart';
@@ -44,16 +48,13 @@ class HomePageSafeArea extends StatelessWidget {
               child: Container(
                 width: screenWidth * 0.8,
                 height: screenHeight * 0.1,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(24),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color.fromARGB(50, 0, 0, 0),
-                        blurRadius: 4,
-                        offset: Offset(0, 4),
-                      )
-                    ]),
+                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24), boxShadow: [
+                  BoxShadow(
+                    color: Color.fromARGB(50, 0, 0, 0),
+                    blurRadius: 4,
+                    offset: Offset(0, 4),
+                  )
+                ]),
                 child: Padding(
                   padding: EdgeInsets.only(left: 10, top: 20),
                   child: Column(
@@ -62,8 +63,7 @@ class HomePageSafeArea extends StatelessWidget {
                     children: [
                       Text(
                         "Welcome " + MyUser.User.instance.getName(),
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 8.0),
@@ -78,19 +78,19 @@ class HomePageSafeArea extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(
-                  left: screenWidth * 0.1,
-                  top: screenHeight * 0.02,
-                  right: screenWidth * 0.1),
+              padding: EdgeInsets.only(left: screenWidth * 0.1, top: screenHeight * 0.02, right: screenWidth * 0.1),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  CustomHomePageCard(iconURL: "assets/MessMenuIcon.svg", title: "Mess Menu", func: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (builder) {
+                        return MessMenuScaffold();
+                      }),
+                    );
+                  }),
                   CustomHomePageCard(
-                      icon: Image.asset('assets/default_pic.jpg'),
-                      title: "Mess Menu",
-                      func: () {}),
-                  CustomHomePageCard(
-                      icon: Image.asset('assets/default_pic.jpg'),
+                      iconURL: "assets/MessOffIcon.svg",
                       title: "Mess Off",
                       func: () {
                         Navigator.of(context).push(
@@ -103,21 +103,12 @@ class HomePageSafeArea extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(
-                  left: screenWidth * 0.1,
-                  top: screenHeight * 0.02,
-                  right: screenWidth * 0.1),
+              padding: EdgeInsets.only(left: screenWidth * 0.1, top: screenHeight * 0.02, right: screenWidth * 0.1),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CustomHomePageCard(
-                      icon: Image.asset('assets/default_pic.jpg'),
-                      title: "Location",
-                      func: () {}),
-                  CustomHomePageCard(
-                      icon: Image.asset('assets/default_pic.jpg'),
-                      title: "Chat",
-                      func: () {}),
+                  CustomHomePageCard(iconURL: "assets/LocationIcon.svg", title: "Location", func: () {}),
+                  CustomHomePageCard(iconURL: "assets/ChatIcon.svg", title: "Chat", func: () {}),
                 ],
               ),
             ),
@@ -140,23 +131,50 @@ class HomePageSafeArea extends StatelessWidget {
       ),
       addons: [
         Padding(
-          padding: EdgeInsets.only(
-              left: screenWidth * 0.1, top: screenHeight * 0.05),
+          padding: EdgeInsets.only(left: screenWidth * 0.1, top: screenHeight * 0.05),
           child: Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                      color: Color.fromARGB(75, 0, 0, 0),
-                      offset: Offset(1, 2),
-                      blurRadius: 8)
-                ]),
+                boxShadow: [BoxShadow(color: Color.fromARGB(75, 0, 0, 0), offset: Offset(1, 2), blurRadius: 8)]),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: MyUser.User.instance.getProfilePic(),
             ),
           ),
         ),
+        Padding(
+          padding: EdgeInsets.only(left: screenWidth * 0.75, top: screenHeight * 0.015),
+          child: Container(
+            width: screenWidth * 0.15,
+            height: screenWidth * 0.15,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: Colors.white,
+              boxShadow: [BoxShadow(color: Color.fromARGB(75, 0, 0, 0), offset: Offset(1, 2), blurRadius: 2)],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: InkWell(
+                child: Icon(
+                  Icons.logout_outlined,
+                  size: screenWidth * 0.1,
+                ),
+                onTap: () {
+                  FirebaseAuth.instance.signOut().then((value) {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(MaterialPageRoute(builder: (builder) {
+                      return Scaffold(
+                        body: SafeArea(
+                          child: SingleChildScrollView(child: SignInSignUpPage()),
+                        ),
+                      );
+                    }));
+                  });
+                },
+              ),
+            ),
+          ),
+        )
       ],
     );
   }

@@ -186,7 +186,7 @@ class _CustomMealCardState extends State<CustomMealCard> {
             width: screenWidth * 0.3,
             height: screenHeight * 0.06,
             decoration: BoxDecoration(
-              color: Colors.pinkAccent,
+              color: Color.fromARGB(0xFF, 0xFF, 0xA6, 0x3A),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(32),
                 topRight: Radius.circular(32),
@@ -253,7 +253,7 @@ class _CustomMealCardState extends State<CustomMealCard> {
                     child: Icon(
                       Icons.remove_circle,
                       size: screenHeight * 0.04,
-                      color: Colors.deepPurple,
+                      color: Color.fromARGB(0xFF, 0xFF, 0xA6, 0x3A),
                     ),
                   ),
                 )

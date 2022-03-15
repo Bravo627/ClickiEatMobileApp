@@ -6,6 +6,8 @@ class FlexBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
@@ -15,7 +17,10 @@ class FlexBanner extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          SvgPicture.asset("assets/BackgroundIllustration.svg", fit: BoxFit.fill,),
+          SvgPicture.asset(
+            "assets/BackgroundIllustration.svg",
+            fit: BoxFit.fill,
+          ),
           Center(
             child: SvgPicture.asset("assets/HomepageLogo.svg"),
           ),

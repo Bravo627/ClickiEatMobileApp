@@ -152,7 +152,7 @@ class _AuthTabSectionState extends State<AuthTabSection>
                 ),
           TextButton(
             style: TextButton.styleFrom(
-              backgroundColor: Colors.pinkAccent,
+              backgroundColor: Color.fromARGB(0xFF, 0xFF, 0xA6, 0x3A),
               primary: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(

@@ -39,7 +39,7 @@ class _MessOffScaffoldState extends State<MessOffScaffold> {
     datesSelected.add(start);
 
     if (MessOffScaffold.isFirst) {
-      MessOffScaffold.futureMessMenu = getMessMenu();
+      MessOffScaffold.futureMessMenu = MessMenu.instance;
       MessOffScaffold.futureMessOffInformation =
           getMessOffInformation(MyUser.User.instance.getEmailAddress(), start, end);
       MessOffScaffold.isFirst = false;
@@ -70,7 +70,7 @@ class _MessOffScaffoldState extends State<MessOffScaffold> {
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.deepPurple,
+                    color: Color.fromARGB(0xFF, 0x30, 0x5D, 0x51),
                   ),
                 ),
               ),
@@ -168,7 +168,7 @@ class _MessOffScaffoldState extends State<MessOffScaffold> {
                             padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04, vertical: screenHeight * 0.02),
                             child: TextButton(
                               style: TextButton.styleFrom(
-                                backgroundColor: Colors.pinkAccent,
+                                backgroundColor: Color.fromARGB(0xFF, 0xFF, 0xA6, 0x3A),
                                 primary: Colors.white,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.all(

@@ -227,11 +227,11 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> with SingleTickerPr
           child: TabBar(
             // indicator: UnderlineTabIndicator(insets: EdgeInsets.zero, borderSide: BorderSide(width: 2)),
             controller: controller,
-            labelColor: Colors.deepPurpleAccent,
+            labelColor: Color.fromARGB(0xFF, 0xFF, 0xA6, 0x3A),
             labelStyle: TextStyle(
               fontSize: 16,
             ),
-            indicatorColor: Colors.deepPurpleAccent,
+            indicatorColor: Color.fromARGB(0xFF, 0xFF, 0xA6, 0x3A),
             indicatorPadding: EdgeInsets.zero,
             unselectedLabelColor: Colors.black,
             indicatorSize: TabBarIndicatorSize.label,
@@ -326,7 +326,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> with SingleTickerPr
                   MyUser.User.instance.setName(map["name"]);
                   if (map["image"] == null) {
                     MyUser.User.instance.setProfilePic(Image.asset(
-                      "assets/default_pic.jpg",
+                      "assets/default_pic.png",
                       height: screenHeight * 0.1,
                       width: screenHeight * 0.1,
                     ));
