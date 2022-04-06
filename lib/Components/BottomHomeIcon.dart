@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class BottomHomeIcon extends StatefulWidget {
   BottomHomeIcon({Key? key}) : super(key: key);
@@ -18,12 +19,21 @@ class _BottomHomeIconState extends State<BottomHomeIcon> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Container(
-            width: screenHeight * 0.08,
-            height: screenHeight * 0.08,
-            decoration: BoxDecoration(
-                color: Color.fromARGB(75, 237, 147, 189),
-                borderRadius: BorderRadius.circular(100)),
-          )
+            width: screenHeight * 0.04,
+            height: screenHeight * 0.04,
+            child: InkWell(
+              child: SvgPicture.asset("assets/HomeIcon.svg"),
+              onTap: () {},
+            ),
+          ),
+          Container(
+            width: screenHeight * 0.04,
+            height: screenHeight * 0.04,
+            child: InkWell(
+              child: SvgPicture.asset("assets/LocationIcon.svg"),
+              onTap: () {},
+            ),
+          ),
         ],
       ),
     );

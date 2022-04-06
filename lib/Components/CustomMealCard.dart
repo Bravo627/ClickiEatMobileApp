@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'MessOffInformation.dart';
+import '../Singletons/MessOffInformation.dart';
 
 List<String> getMessMealFromList(DateTime currentDay, Map<String, List<String>> meals) {
   int dayOfWeek = currentDay.weekday;
@@ -210,7 +210,11 @@ class _CustomMealCardState extends State<CustomMealCard> {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                    color: Color.fromARGB(100, 237, 147, 189), offset: Offset(1, 2), blurRadius: 16, spreadRadius: 2),
+                  color: Color.fromARGB(50, 0xFF, 0xA6, 0x3A),
+                  offset: Offset(1, 2),
+                  blurRadius: 4,
+                  spreadRadius: 1,
+                ),
               ],
             ),
             child: Center(

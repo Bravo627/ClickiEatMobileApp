@@ -1,6 +1,6 @@
-import 'package:clicki_eat/BasePage.dart';
-import 'package:clicki_eat/MessMenu.dart';
-import 'package:clicki_eat/MessVote.dart';
+import 'package:clicki_eat/Scaffolds/BasePage.dart';
+import 'package:clicki_eat/Singletons/MessMenu.dart';
+import 'package:clicki_eat/Singletons/MessVote.dart';
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';

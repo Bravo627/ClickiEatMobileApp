@@ -1,13 +1,13 @@
-import 'package:clicki_eat/BasePage.dart';
+import 'package:clicki_eat/Scaffolds/BasePage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import 'CustomMealCard.dart';
-import 'MessMenu.dart';
-import 'MessOffInformation.dart';
-import 'User.dart' as MyUser;
+import '../Components/CustomMealCard.dart';
+import '../Singletons/MessMenu.dart';
+import '../Singletons/MessOffInformation.dart';
+import '../Singletons/User.dart' as MyUser;
 
 class MessOffScaffold extends StatefulWidget {
   static bool isFirst = true;

@@ -1,4 +1,4 @@
-import 'package:clicki_eat/Hostels.dart';
+import 'package:clicki_eat/Singletons/Hostels.dart';
 import 'package:flutter/material.dart';
 
 class HostelListButton extends StatefulWidget {

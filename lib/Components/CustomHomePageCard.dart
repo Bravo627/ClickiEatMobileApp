@@ -24,7 +24,9 @@ class _CustomHomePageCardState extends State<CustomHomePageCard> {
       width: screenWidth * 0.36,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(32)),
+        borderRadius: BorderRadius.all(
+          Radius.circular(32),
+        ),
         boxShadow: [
           BoxShadow(
             color: Color.fromARGB(50, 0xFF, 0xA6, 0x3A),
@@ -36,8 +38,10 @@ class _CustomHomePageCardState extends State<CustomHomePageCard> {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.all(Radius.circular(32)),
-          splashColor: Color.fromARGB(75, 237, 147, 189),
+          borderRadius: BorderRadius.all(
+            Radius.circular(32),
+          ),
+          splashColor: Color.fromARGB(50, 0xFF, 0xA6, 0x3A),
           onTap: widget.func,
           child: Column(
             children: [
@@ -48,22 +52,22 @@ class _CustomHomePageCardState extends State<CustomHomePageCard> {
                   top: 16,
                 ),
                 child: Container(
-                  height: screenHeight * 0.13,
+                  height: screenHeight * 0.12,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: Svg(widget.iconURL, scale: 2),
                       fit: BoxFit.scaleDown,
                     ),
-                    borderRadius: BorderRadius.only(
+                    /*borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(32),
                       topRight: Radius.circular(32),
-                    ),
+                    ),*/
                   ),
                 ),
               ),
               Padding(
                 padding: EdgeInsets.only(
-                  top: screenHeight * 0.015,
+                  top: screenHeight * 0.028,
                 ),
                 child: Text(
                   widget.title,

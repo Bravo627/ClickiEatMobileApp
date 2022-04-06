@@ -1,15 +1,17 @@
-import 'package:clicki_eat/BasePage.dart';
-import 'package:clicki_eat/CustomHomePageCard.dart';
-import 'package:clicki_eat/MessMenuPage.dart';
-import 'package:clicki_eat/SignInSignUpPage.dart';
+import 'package:clicki_eat/Components/CustomHomePageCard.dart';
+import 'package:clicki_eat/Scaffolds/BasePage.dart';
+import 'package:clicki_eat/Scaffolds/MessBillPage.dart';
+import 'package:clicki_eat/Scaffolds/MessMenuPage.dart';
+import 'package:clicki_eat/Scaffolds/SignInSignUpPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
-import 'BottomHomeIcon.dart';
+import '../Components/BottomHomeIcon.dart';
+import '../Singletons/User.dart' as MyUser;
+import 'ChatPage.dart';
+import 'MessMenuPage.dart';
 import 'MessOffPage.dart';
-import 'User.dart' as MyUser;
 
 class HomePageScaffold extends StatefulWidget {
   const HomePageScaffold({Key? key}) : super(key: key);
@@ -56,7 +58,7 @@ class HomePageSafeArea extends StatelessWidget {
                   )
                 ]),
                 child: Padding(
-                  padding: EdgeInsets.only(left: 10, top: 20),
+                  padding: EdgeInsets.only(left: 12, top: 10),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,7 +68,7 @@ class HomePageSafeArea extends StatelessWidget {
                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
+                        padding: const EdgeInsets.only(top: 4.0),
                         child: Text(
                           MyUser.User.instance.getEmailAddress(),
                           style: TextStyle(fontSize: 14),
@@ -82,23 +84,28 @@ class HomePageSafeArea extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CustomHomePageCard(iconURL: "assets/MessMenuIcon.svg", title: "Mess Menu", func: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (builder) {
-                        return MessMenuScaffold();
-                      }),
-                    );
-                  }),
                   CustomHomePageCard(
-                      iconURL: "assets/MessOffIcon.svg",
-                      title: "Mess Off",
-                      func: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (builder) {
-                            return MessOffScaffold();
-                          }),
-                        );
-                      }),
+                    iconURL: "assets/MessMenuIcon.svg",
+                    title: "Mess Menu",
+                    func: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (builder) {
+                          return MessMenuScaffold();
+                        }),
+                      );
+                    },
+                  ),
+                  CustomHomePageCard(
+                    iconURL: "assets/MessOffIcon.svg",
+                    title: "Mess Off",
+                    func: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (builder) {
+                          return MessOffScaffold();
+                        }),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
@@ -107,8 +114,28 @@ class HomePageSafeArea extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CustomHomePageCard(iconURL: "assets/LocationIcon.svg", title: "Location", func: () {}),
-                  CustomHomePageCard(iconURL: "assets/ChatIcon.svg", title: "Chat", func: () {}),
+                  CustomHomePageCard(
+                    iconURL: "assets/MessBillIcon.svg",
+                    title: "Mess Bill",
+                    func: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (builder) {
+                          return MessBillScaffold();
+                        }),
+                      );
+                    },
+                  ),
+                  CustomHomePageCard(
+                    iconURL: "assets/ChatIcon.svg",
+                    title: "Chat",
+                    func: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (builder) {
+                          return ChatPageScaffold();
+                        }),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
@@ -118,10 +145,10 @@ class HomePageSafeArea extends StatelessWidget {
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(50),
-                      topRight: Radius.circular(50),
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
                     )),
-                height: screenHeight * 0.12,
+                height: screenHeight * 0.08,
                 width: double.infinity,
                 child: BottomHomeIcon(),
               ),

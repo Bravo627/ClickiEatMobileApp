@@ -1,6 +1,7 @@
-import 'package:clicki_eat/User.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:core';
+
+import 'User.dart';
 
 String replaceSpecialCharacterInMealName(String mealName) {
   return mealName.replaceAll(RegExp(r"[^\w\s]+"), "");

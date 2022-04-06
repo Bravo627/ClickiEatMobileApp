@@ -37,6 +37,10 @@ flutter:
     - assets/LocationIcon.svg
     - assets/MessOffIcon.svg
     - assets/default_pic.png
+    - assets/MessBillIcon.svg
+    - assets/HomeIcon.svg
+    - assets/BinancePay.svg
+    - assets/EasyPaisaPay.svg
 
   fonts:
     - family: Nexa

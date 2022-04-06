@@ -2,17 +2,16 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 
-import 'package:clicki_eat/HomePage.dart';
+import 'package:clicki_eat/Scaffolds/HomePage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../Components/FlexBanner.dart';
+import '../Components/ShowAlertDialog.dart';
 import 'AuthTabSection.dart';
-import 'FlexBanner.dart';
 import 'HomePage.dart';
-import 'ShowAlertDialog.dart';
-import 'User.dart' as MyUser;
+import '../Singletons/User.dart' as MyUser;
 
 class SignInSignUpPage extends StatefulWidget {
   const SignInSignUpPage({Key? key}) : super(key: key);

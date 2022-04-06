@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-import 'SignInSignUpPage.dart';
+import 'Scaffolds/SignInSignUpPage.dart';
 
 /// The main function.
 /// Initializes all necessary bindings and run the app.
