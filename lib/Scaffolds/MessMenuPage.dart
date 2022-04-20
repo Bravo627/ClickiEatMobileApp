@@ -101,7 +101,10 @@ class _MealCardState extends State<MealCard> {
                             OutlinedButton(
                               onPressed: () {
                                 messVoteData[replaceSpecialCharacterInMealName(messMenuData[this.widget.day]![timeToIndex(this.widget.time)])] = VoteType.LIKE;
-                                MessVote.send(castMessVoteToFirebase(messVoteData));
+
+                                Map<String, bool> castedData = castMessVoteToFirebase(messVoteData);
+                                MessVote.send(castedData);
+                                MessVote.updateCollectively(castedData);
 
                                 setState(() {
                                   MessVote.reset();
@@ -124,7 +127,9 @@ class _MealCardState extends State<MealCard> {
                             OutlinedButton(
                               onPressed: () {
                                 messVoteData[replaceSpecialCharacterInMealName(messMenuData[this.widget.day]![timeToIndex(this.widget.time)])] = VoteType.DISLIKE;
-                                MessVote.send(castMessVoteToFirebase(messVoteData));
+                                Map<String, bool> castedData = castMessVoteToFirebase(messVoteData);
+                                MessVote.send(castedData);
+                                MessVote.updateCollectively(castedData);
 
                                 setState(() {
                                   MessVote.reset();

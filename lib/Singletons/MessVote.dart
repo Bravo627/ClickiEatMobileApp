@@ -37,6 +37,32 @@ class MessVote {
     });
     await instance.collection("MessVote").doc(User.instance.getEmailAddress()).update(data);
   }
+
+  static void updateCollectively(Map<String, bool> data) async {
+    FirebaseFirestore instance = FirebaseFirestore.instance;
+    data = data.map((String key, bool value) {
+      return MapEntry(replaceSpecialCharacterInMealName(key), value);
+    });
+
+    Map<String, dynamic> dataSnapshot = (await instance.collection("MessVoteCollectively").doc("collection").get()).data()!;
+    Map<String, List<int>> collectiveData = dataSnapshot.map((String key, dynamic value) {
+      return MapEntry(replaceSpecialCharacterInMealName(key), (value as List<dynamic>).map((e) { return e as int; }).toList());
+    });
+
+    for (MapEntry<String, bool> entry in data.entries) {
+      if (!collectiveData.containsKey(replaceSpecialCharacterInMealName(entry.key))) {
+        collectiveData[replaceSpecialCharacterInMealName(entry.key)] = [0, 0];
+      }
+
+      if (entry.value) {
+        collectiveData[replaceSpecialCharacterInMealName(entry.key)]![0]++;
+      } else {
+        collectiveData[replaceSpecialCharacterInMealName(entry.key)]![1]++;
+      }
+    }
+
+    await instance.collection("MessVoteCollectively").doc("collection").update(collectiveData);
+  }
 }
 
 enum VoteType {

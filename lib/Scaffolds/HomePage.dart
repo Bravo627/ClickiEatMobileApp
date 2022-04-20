@@ -4,7 +4,6 @@ import 'package:clicki_eat/Scaffolds/MessBillPage.dart';
 import 'package:clicki_eat/Scaffolds/MessMenuPage.dart';
 import 'package:clicki_eat/Scaffolds/SignInSignUpPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../Components/BottomHomeIcon.dart';
@@ -143,14 +142,19 @@ class HomePageSafeArea extends StatelessWidget {
               padding: EdgeInsets.only(top: screenHeight * 0.02),
               child: Container(
                 decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Colors.grey.shade200,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20),
                     )),
-                height: screenHeight * 0.08,
+                height: screenHeight * 0.1,
                 width: double.infinity,
-                child: BottomHomeIcon(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    BottomHomeIcon(),
+                  ],
+                ),
               ),
             ),
           ],

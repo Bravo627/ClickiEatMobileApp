@@ -83,7 +83,7 @@ class _ChatPageScaffoldState extends State<ChatPageScaffold> {
                                             Container(
                                               width: screenWidth * 0.7,
                                               // padding: EdgeInsets.all(8),
-                                              child: Text(User.user.getName()),
+                                              child: Text(messages[index].data()["name"]),
                                             ),
                                           ],
                                         )
@@ -195,6 +195,7 @@ class _ChatPageScaffoldState extends State<ChatPageScaffold> {
                                         .doc(DateTime.now().toUtc().toString()),
                                     {
                                       "from": User.user.getEmailAddress(),
+                                      "name": User.user.getName(),
                                       "message": _messageController.text,
                                       "timestamp": DateTime.now().toUtc().toString(),
                                     },

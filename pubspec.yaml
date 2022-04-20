@@ -41,6 +41,7 @@ flutter:
     - assets/HomeIcon.svg
     - assets/BinancePay.svg
     - assets/EasyPaisaPay.svg
+    - assets/FeedbackIcon.svg
 
   fonts:
     - family: Nexa
