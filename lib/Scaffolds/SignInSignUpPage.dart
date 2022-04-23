@@ -115,6 +115,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> with SingleTickerPr
                         HashMap<String, String> map = HashMap<String, String>();
                         map["hostel"] = hostelNameController.text;
                         map["name"] = signUpNameController.text;
+                        map["isAdmin"] = "false";
                         await FirebaseFirestore.instance.collection("Users").doc(signUpEmailController.text).set(map);
                         await FirebaseAuth.instance.signOut();
                       } on FirebaseAuthException catch (e) {
@@ -147,16 +148,25 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> with SingleTickerPr
               return mainContainer;
             }
 
-            Future.delayed(Duration(), () {
+            Future.delayed(Duration(), () async {
               if (!user.emailVerified) {
-                user.sendEmailVerification();
-                showAlertDialog(context, "Email Verification", "Check your email for verification...");
+                await user.sendEmailVerification();
+                await showAlertDialog(context, "Email Verification", "Check your email for verification...");
+                return;
               } else {
                 MyUser.User.instance.setEmailAddress(user.email!);
-                FirebaseFirestore.instance.collection("Users").doc(user.email!).get().then((value) {
-                  Map<String, dynamic> map = value.data()!;
-                  MyUser.User.instance.setHostel(map["hostel"]);
-                  MyUser.User.instance.setName(map["name"]);
+                FirebaseFirestore.instance.collection("Users").doc(user.email!).get().then((value) async {
+                  Map<String, String> map = value.data()!.map((String name, dynamic value) {
+                    return MapEntry(name, value as String);
+                  });
+                  if (map["isAdmin"]! == "true") {
+                    await showAlertDialog(context, "Admin account", "Please use admin dashboard to sign in...");
+                    await FirebaseAuth.instance.signOut();
+                    return;
+                  }
+
+                  MyUser.User.instance.setHostel(map["hostel"]!);
+                  MyUser.User.instance.setName(map["name"]!);
                   if (map["image"] == null) {
                     MyUser.User.instance.setProfilePic(Image.asset(
                       "assets/default_pic.png",
@@ -165,7 +175,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> with SingleTickerPr
                     ));
                   } else {
                     MyUser.User.instance.setProfilePic(Image.memory(
-                      Base64Decoder().convert(map["image"]),
+                      Base64Decoder().convert(map["image"]!),
                       height: screenHeight * 0.1,
                       width: screenHeight * 0.1,
                     ));
@@ -194,45 +204,53 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> with SingleTickerPr
     );
   }
 
-  void authListener(User? user) {
-    if (user != null) {
-      if (!user.emailVerified) {
-        user.sendEmailVerification();
-        showAlertDialog(context, "Email Verification", "Check your email for verification...");
-      } else {
-        MyUser.User.instance.setEmailAddress(user.email!);
-        FirebaseFirestore.instance.collection("Users").doc(user.email!).get().then((value) {
-          Map<String, dynamic> map = value.data()!;
-          MyUser.User.instance.setHostel(map["hostel"]);
-          MyUser.User.instance.setName(map["name"]);
-          if (map["image"] == null) {
-            MyUser.User.instance.setProfilePic(Image.asset(
-              "assets/default_pic.jpg",
-              height: screenHeight * 0.1,
-              width: screenHeight * 0.1,
-            ));
-          } else {
-            MyUser.User.instance.setProfilePic(Image.memory(
-              Base64Decoder().convert(map["image"]),
-              height: screenHeight * 0.1,
-              width: screenHeight * 0.1,
-            ));
-          }
-
-          print(MyUser.User.instance.getEmailAddress());
-          print(MyUser.User.instance.getName());
-          print(MyUser.User.instance.getHostel());
-
-          Navigator.of(context).pop();
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-            return HomePageScaffold();
-          }));
-        });
-      }
-    } else {
-      MyUser.User.instance.setName("");
-      MyUser.User.instance.setEmailAddress("");
-      MyUser.User.instance.setHostel("");
-    }
-  }
+  // void authListener(User? user) {
+  //   if (user != null) {
+  //     if (!user.emailVerified) {
+  //       user.sendEmailVerification();
+  //       showAlertDialog(context, "Email Verification", "Check your email for verification...");
+  //     } else {
+  //       MyUser.User.instance.setEmailAddress(user.email!);
+  //       FirebaseFirestore.instance.collection("Users").doc(user.email!).get().then((value) {
+  //         Map<String, String> map = value.data()!.map((String name, dynamic value) {
+  //           return MapEntry(name, value as String);
+  //         });
+  //         if (map["isAdmin"]! == "true") {
+  //           FirebaseAuth.instance.signOut().then((value) {
+  //             showAlertDialog(context, "Admin account", "Please use admin dashboard to sign in...");
+  //           });
+  //         }
+  //
+  //         MyUser.User.instance.setHostel(map["hostel"]!);
+  //         MyUser.User.instance.setName(map["name"]!);
+  //         if (map["image"] == null) {
+  //           MyUser.User.instance.setProfilePic(Image.asset(
+  //             "assets/default_pic.jpg",
+  //             height: screenHeight * 0.1,
+  //             width: screenHeight * 0.1,
+  //           ));
+  //         } else {
+  //           MyUser.User.instance.setProfilePic(Image.memory(
+  //             Base64Decoder().convert(map["image"]!),
+  //             height: screenHeight * 0.1,
+  //             width: screenHeight * 0.1,
+  //           ));
+  //         }
+  //
+  //         print(MyUser.User.instance.getEmailAddress());
+  //         print(MyUser.User.instance.getName());
+  //         print(MyUser.User.instance.getHostel());
+  //
+  //         Navigator.of(context).pop();
+  //         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+  //           return HomePageScaffold();
+  //         }));
+  //       });
+  //     }
+  //   } else {
+  //     MyUser.User.instance.setName("");
+  //     MyUser.User.instance.setEmailAddress("");
+  //     MyUser.User.instance.setHostel("");
+  //   }
+  // }
 }
