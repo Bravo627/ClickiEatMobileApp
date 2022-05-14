@@ -12,14 +12,22 @@ class MessVote {
 
   static Future<Map<String, bool>> _getMessVote() async {
     FirebaseFirestore instance = FirebaseFirestore.instance;
-
+    await FirebaseFirestore.instance.collection("MessVote").doc(User.instance.getEmailAddress()).set({
+      "updated": DateTime.now().toUtc().toString(),
+    });
     Map<String, dynamic> result = (await instance.collection("MessVote").doc(User.instance.getEmailAddress()).get()).data()!;
-    return result.map((String key, dynamic value) => MapEntry<String, bool>(key, value as bool));
+
+    result.remove("updated");
+    return result.map((String key, dynamic value) {
+      return MapEntry<String, bool>(key, value as bool);
+    });
   }
 
   static Future<Map<String, bool>> get instance async {
     if (_instance == null) {
       _instance = await _getMessVote();
+
+      print("Got MessVote");
       return _instance!;
     }
 

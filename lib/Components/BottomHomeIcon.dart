@@ -54,9 +54,9 @@ class _BottomHomeIconState extends State<BottomHomeIcon> {
                   child: SvgPicture.asset("assets/FeedbackIcon.svg", height: screenHeight * 0.04,),
                 ),
                 Text(
-                  "Feedback",
+                  "Complaint",
                   style: TextStyle(
-                    fontSize: 9,
+                    fontSize: 8,
                   ),
                 ),
               ],

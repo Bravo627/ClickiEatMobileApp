@@ -31,6 +31,8 @@ class MessMenu {
   static Future<Map<String, List<String>>> get instance async {
     if (_instance == null) {
       _instance = await _getMessMenu();
+
+      print("Got MessMenu");
       return _instance!;
     }
 
