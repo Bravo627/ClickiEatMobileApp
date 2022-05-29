@@ -1,0 +1,310 @@
+@startuml
+set namespaceSeparator ::
+
+class "clicki_eat::Components::BottomHomeIcon.dart::BottomHomeIcon" {
+  +_BottomHomeIconState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "clicki_eat::Components::BottomHomeIcon.dart::BottomHomeIcon"
+
+class "clicki_eat::Components::BottomHomeIcon.dart::_BottomHomeIconState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "clicki_eat::Components::BottomHomeIcon.dart::_BottomHomeIconState"
+
+class "clicki_eat::Components::CustomHomePageCard.dart::CustomHomePageCard" {
+  +String iconURL
+  +String title
+  +void Function() func
+  +_CustomHomePageCardState createState()
+}
+
+"clicki_eat::Components::CustomHomePageCard.dart::CustomHomePageCard" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "clicki_eat::Components::CustomHomePageCard.dart::CustomHomePageCard"
+
+class "clicki_eat::Components::CustomHomePageCard.dart::_CustomHomePageCardState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "clicki_eat::Components::CustomHomePageCard.dart::_CustomHomePageCardState"
+
+class "clicki_eat::Components::CustomMealCard.dart::CustomMealCard" {
+  +String mealTime
+  +List<DateTime> days
+  +Map<String, List<String>> meals
+  +Map<String, Map<String, int>> messOffInformation
+  +_CustomMealCardState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "clicki_eat::Components::CustomMealCard.dart::CustomMealCard"
+
+class "clicki_eat::Components::CustomMealCard.dart::_CustomMealCardState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "clicki_eat::Components::CustomMealCard.dart::_CustomMealCardState"
+
+class "clicki_eat::Components::FlexBanner.dart::FlexBanner" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "clicki_eat::Components::FlexBanner.dart::FlexBanner"
+
+class "clicki_eat::main.dart::MainApp" {
+  +_MainAppState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "clicki_eat::main.dart::MainApp"
+
+class "clicki_eat::main.dart::_MainAppState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "clicki_eat::main.dart::_MainAppState"
+
+class "clicki_eat::Scaffolds::AuthTabSection.dart::HostelListButton" {
+  +TextEditingController controller
+  +List<String> hostelsName
+  +State<HostelListButton> createState()
+}
+
+"clicki_eat::Scaffolds::AuthTabSection.dart::HostelListButton" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "clicki_eat::Scaffolds::AuthTabSection.dart::HostelListButton"
+
+class "clicki_eat::Scaffolds::AuthTabSection.dart::_HostelListButtonState" {
+  +String selectedHostelName
+  +void initState()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "clicki_eat::Scaffolds::AuthTabSection.dart::_HostelListButtonState"
+
+class "clicki_eat::Scaffolds::AuthTabSection.dart::AuthTabSection" {
+  +TextEditingController nameController
+  +TextEditingController emailController
+  +TextEditingController passwordController
+  +TextEditingController hostelsController
+  +bool isLoginMode
+  +void Function()? onPress
+  +State<AuthTabSection> createState()
+}
+
+"clicki_eat::Scaffolds::AuthTabSection.dart::AuthTabSection" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"clicki_eat::Scaffolds::AuthTabSection.dart::AuthTabSection" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "clicki_eat::Scaffolds::AuthTabSection.dart::AuthTabSection"
+
+class "clicki_eat::Scaffolds::AuthTabSection.dart::_AuthTabSectionState" {
+  +bool wantKeepAlive
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "clicki_eat::Scaffolds::AuthTabSection.dart::_AuthTabSectionState"
+"flutter::src::widgets::automatic_keep_alive.dart::AutomaticKeepAliveClientMixin" <|-- "clicki_eat::Scaffolds::AuthTabSection.dart::_AuthTabSectionState"
+
+class "clicki_eat::Scaffolds::BasePage.dart::BasePageScaffold" {
+  +Widget child
+  +List<Widget> addons
+  +bool isGradient
+  +_BasePageScaffoldState createState()
+}
+
+"clicki_eat::Scaffolds::BasePage.dart::BasePageScaffold" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "clicki_eat::Scaffolds::BasePage.dart::BasePageScaffold"
+
+class "clicki_eat::Scaffolds::BasePage.dart::_BasePageScaffoldState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "clicki_eat::Scaffolds::BasePage.dart::_BasePageScaffoldState"
+
+class "clicki_eat::Scaffolds::ChatPage.dart::ChatPageScaffold" {
+  +_ChatPageScaffoldState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "clicki_eat::Scaffolds::ChatPage.dart::ChatPageScaffold"
+
+class "clicki_eat::Scaffolds::ChatPage.dart::_ChatPageScaffoldState" {
+  -TextEditingController _messageController
+  -ScrollController _scrollController
+  +Widget build()
+}
+
+"clicki_eat::Scaffolds::ChatPage.dart::_ChatPageScaffoldState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"clicki_eat::Scaffolds::ChatPage.dart::_ChatPageScaffoldState" o-- "flutter::src::widgets::scroll_controller.dart::ScrollController"
+"flutter::src::widgets::framework.dart::State" <|-- "clicki_eat::Scaffolds::ChatPage.dart::_ChatPageScaffoldState"
+
+class "clicki_eat::Scaffolds::FeedbackPage.dart::FeedbackScaffold" {
+  +_FeedbackScaffoldState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "clicki_eat::Scaffolds::FeedbackPage.dart::FeedbackScaffold"
+
+class "clicki_eat::Scaffolds::FeedbackPage.dart::_FeedbackScaffoldState" {
+  -TextEditingController _controller
+  -bool _switchValue
+  +Widget build()
+}
+
+"clicki_eat::Scaffolds::FeedbackPage.dart::_FeedbackScaffoldState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "clicki_eat::Scaffolds::FeedbackPage.dart::_FeedbackScaffoldState"
+
+class "clicki_eat::Scaffolds::HomePage.dart::HomePageScaffold" {
+  +_HomePageScaffoldState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "clicki_eat::Scaffolds::HomePage.dart::HomePageScaffold"
+
+class "clicki_eat::Scaffolds::HomePage.dart::_HomePageScaffoldState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "clicki_eat::Scaffolds::HomePage.dart::_HomePageScaffoldState"
+
+class "clicki_eat::Scaffolds::HomePage.dart::HomePageSafeArea" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "clicki_eat::Scaffolds::HomePage.dart::HomePageSafeArea"
+
+class "clicki_eat::Scaffolds::MessBillPage.dart::MessBillScaffold" {
+  {static} +Future<int> currentMonthBill
+  +_MessBillScaffoldState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "clicki_eat::Scaffolds::MessBillPage.dart::MessBillScaffold"
+
+class "clicki_eat::Scaffolds::MessBillPage.dart::_MessBillScaffoldState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "clicki_eat::Scaffolds::MessBillPage.dart::_MessBillScaffoldState"
+
+class "clicki_eat::Scaffolds::MessMenuPage.dart::MealCard" {
+  +String time
+  +String day
+  +State<MealCard> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "clicki_eat::Scaffolds::MessMenuPage.dart::MealCard"
+
+class "clicki_eat::Scaffolds::MessMenuPage.dart::_MealCardState" {
+  +Future<Map<String, List<String>>> messMenu
+  +Future<Map<String, VoteType>> messVote
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "clicki_eat::Scaffolds::MessMenuPage.dart::_MealCardState"
+
+class "clicki_eat::Scaffolds::MessMenuPage.dart::MessMenuScaffold" {
+  +Color highlightedColor
+  +Color normalColor
+  +_MessMenuScaffoldState createState()
+}
+
+"clicki_eat::Scaffolds::MessMenuPage.dart::MessMenuScaffold" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "clicki_eat::Scaffolds::MessMenuPage.dart::MessMenuScaffold"
+
+class "clicki_eat::Scaffolds::MessMenuPage.dart::_MessMenuScaffoldState" {
+  +String day
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "clicki_eat::Scaffolds::MessMenuPage.dart::_MessMenuScaffoldState"
+
+class "clicki_eat::Scaffolds::MessOffPage.dart::MessOffScaffold" {
+  {static} +bool isFirst
+  {static} +Future<Map<String, List<String>>>? futureMessMenu
+  {static} +Map<String, Map<String, int>>? messOffInformation
+  {static} +Future<Map<String, Map<String, int>>>? futureMessOffInformation
+  +_MessOffScaffoldState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "clicki_eat::Scaffolds::MessOffPage.dart::MessOffScaffold"
+
+class "clicki_eat::Scaffolds::MessOffPage.dart::_MessOffScaffoldState" {
+  +List<DateTime> datesSelected
+  +DateTime now
+  +DateTime start
+  +DateTime end
+  +void initState()
+  +void dispose()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "clicki_eat::Scaffolds::MessOffPage.dart::_MessOffScaffoldState"
+
+class "clicki_eat::Scaffolds::SignInSignUpPage.dart::SignInSignUpPage" {
+  +_SignInSignUpPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "clicki_eat::Scaffolds::SignInSignUpPage.dart::SignInSignUpPage"
+
+class "clicki_eat::Scaffolds::SignInSignUpPage.dart::_SignInSignUpPageState" {
+  +TabController controller
+  +double screenWidth
+  +double screenHeight
+  +TextEditingController signUpNameController
+  +TextEditingController signInEmailController
+  +TextEditingController signInPasswordController
+  +TextEditingController signUpEmailController
+  +TextEditingController signUpPasswordController
+  +TextEditingController hostelNameController
+  +void initState()
+  +void dispose()
+  +Widget build()
+}
+
+"clicki_eat::Scaffolds::SignInSignUpPage.dart::_SignInSignUpPageState" o-- "flutter::src::material::tab_controller.dart::TabController"
+"clicki_eat::Scaffolds::SignInSignUpPage.dart::_SignInSignUpPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "clicki_eat::Scaffolds::SignInSignUpPage.dart::_SignInSignUpPageState"
+"flutter::src::widgets::ticker_provider.dart::SingleTickerProviderStateMixin" <|-- "clicki_eat::Scaffolds::SignInSignUpPage.dart::_SignInSignUpPageState"
+
+class "clicki_eat::Singletons::MessMenu.dart::MessMenu" {
+  {static} -Map<String, List<String>>? _instance
+  {static} +Future<Map<String, List<String>>> instance
+  {static} -Future<Map<String, List<String>>> _getMessMenu()
+}
+
+class "clicki_eat::Singletons::MessVote.dart::MessVote" {
+  {static} -Map<String, bool>? _instance
+  {static} +Future<Map<String, bool>> instance
+  {static} -Future<Map<String, bool>> _getMessVote()
+  {static} +void reset()
+  {static} +void send()
+  {static} +void updateCollectively()
+}
+
+class "clicki_eat::Singletons::MessVote.dart::VoteType" {
+  +int index
+  {static} +List<VoteType> values
+  {static} +VoteType LIKE
+  {static} +VoteType DISLIKE
+  {static} +VoteType NONE
+}
+
+"clicki_eat::Singletons::MessVote.dart::VoteType" o-- "clicki_eat::Singletons::MessVote.dart::VoteType"
+"dart::core::Enum" <|-- "clicki_eat::Singletons::MessVote.dart::VoteType"
+
+class "clicki_eat::Singletons::User.dart::User" {
+  -String _name
+  -String _emailAddress
+  -String _hostel
+  -Image _profilePic
+  {static} +User user
+  {static} +User instance
+  +String getEmailAddress()
+  +String getHostel()
+  +String getName()
+  +Image getProfilePic()
+  +void setEmailAddress()
+  +void setHostel()
+  +void setName()
+  +void setProfilePic()
+}
+
+"clicki_eat::Singletons::User.dart::User" o-- "flutter::src::widgets::image.dart::Image"
+"clicki_eat::Singletons::User.dart::User" o-- "clicki_eat::Singletons::User.dart::User"
+
+
+@enduml
